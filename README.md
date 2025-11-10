@@ -20,11 +20,30 @@ ZPay is built using **Next.js** for both frontend and backend logic, with a **se
 
 ### Environment Configuration
 - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
-- `ZCASH_RPC_URL`, `ZCASH_RPC_USERNAME`, `ZCASH_RPC_PASSWORD`
+- `ZCASH_RPC_URL`, `GETBLOCK_API_KEY`
+- `ZCASH_SHIELDED_ADDRESSES` (JSON array or comma-separated list of Sapling receiver addresses)
 - `FLASHIFT_API_KEY`, `FLASHIFT_API_BASE_URL`, `FLASHIFT_PROVIDER_NAME`
 - `SOLANA_RPC_URL`, `SOLANA_CUSTODIAL_PRIVATE_KEY`
 - `UPSTASH_KAFKA_REST_URL`, `UPSTASH_KAFKA_REST_USERNAME`, `UPSTASH_KAFKA_REST_PASSWORD`, `UPSTASH_KAFKA_TOPIC`
 - `MERCHANT_WEBHOOK_URL`, `MERCHANT_WEBHOOK_SECRET` (optional)
+
+`ZCASH_SHIELDED_ADDRESSES` replaces the old wallet RPC-based address generation. Provide a pool of Sapling receiver addresses as a JSON string (e.g. `["zs1...","zs1..."]`) or a comma-separated list. The app performs a round-robin allocation and falls back to random selection if Redis is unavailable.
+
+#### Verifying GetBlock Connectivity
+After setting the Zcash variables, confirm the node is reachable with a manual JSON-RPC call:
+
+```
+curl --location --request POST "https://go.getblock.io/<ACCESS_TOKEN>/" \
+  --header "Content-Type: application/json" \
+  --data-raw '{
+    "jsonrpc": "2.0",
+    "method": "getblockcount",
+    "params": [],
+    "id": "zpay"
+  }'
+```
+
+Replace `<ACCESS_TOKEN>` with your GetBlock access token. A successful response returns the latest block height. See the [GetBlock testing guide](https://docs.getblock.io/guides/testing-rpc-connection/using-curl-for-testing) for additional examples and troubleshooting tips.
 
 ---
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Session = {
@@ -166,6 +167,12 @@ export default function MerchantPage() {
             <h1 className="text-3xl font-semibold">Payment Sessions Overview</h1>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/merchant/new-product"
+              className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white transition hover:border-white hover:bg-white/10"
+            >
+              Create New Article
+            </Link>
             <button
               onClick={() => fetchSessions()}
               className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white transition hover:border-white hover:bg-white/10"
